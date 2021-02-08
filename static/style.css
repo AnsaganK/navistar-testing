@@ -1,0 +1,712 @@
+body{
+	margin:0px;
+	padding:0px;
+	overflow-x:hidden;
+}
+ul{
+	padding:0;
+	margin:0;
+	list-style-type:none;
+}
+a{
+    text-decoration:none;
+}
+.header{
+	height:60px;
+	text-align: center;
+	background-color: #0e5389;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.25);
+}
+.headText{
+	color:white;
+	font-size: 24px;
+}
+body{
+	font-family: 'Raleway', sans-serif;
+}
+
+.account-menu{
+    height:120px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-bottom:1px solid #c4c4c4;
+    color:white;
+}
+
+.img-user{
+    margin-right:10px;
+    background-color:white;
+    height:90px;
+    width:90px;
+    border-radius:100px;
+    border:1px solid #7c7c7c;
+}
+
+table {
+    border-collapse: collapse;
+    margin:0px auto;
+    margin-top:0px;
+}
+table thead tr {
+    color: #000;
+    font-weight: bold;
+    background: #0e5389;
+}
+table thead tr td {
+    padding:10px;
+    text-align: center;
+    border: 1px solid #adadad;
+    color:white;
+}
+table tbody tr td {
+    outline-color: #4875c5;
+    padding:10px;
+    border: 1px solid #adadad;
+}
+table tbody tr:nth-child(2n) {
+    background: #f4f4f4;
+}
+table tbody tr:hover {
+    background: #e8f7ff;
+}
+.add_file .form-group{
+    padding:1em;margin:1em;
+        display: inline-block;
+}
+.add_file{
+    max-width:600px;
+}
+.add_file input[type=file]{
+    outline:0;
+    opacity:0;
+    pointer-events:none;
+    width:0px;
+    user-select:none
+}
+.add_file .label{
+    width: 120px;
+    border: 2px dashed #50a6ff;
+    border-radius: 5px;
+    display: block;
+    color: #3799ff;
+    padding: 1.2em;
+    transition: border 300ms ease;
+    cursor: pointer;
+    text-align: center;
+}
+.add_file .label i{
+    display:block;
+    font-size:42px;
+    padding-bottom:16px
+}
+.add_file .label i,.add_file .label .title{
+    color: #91d7ff;
+    transition:200ms color
+}
+.add_file .label:hover{
+    border: 2px solid #0e5389;
+}
+.add_file .label:hover i,.add_file .label:hover .title{
+    color:#0e5389
+}
+.add_file button{
+    margin-top:20px;
+}
+
+/*стилизуем менюшку*/
+.hidden-menu {
+  display: block;
+  position: fixed;
+  list-style:none;
+  padding: 10px;
+  margin: 0;
+  box-sizing: border-box;
+  width: 300px;
+  background-color: #0e5389;
+  height: 100%;
+  top: 0;
+  left: -300px;
+  transition: left .2s;
+  z-index: 2;
+  -webkit-transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  box-shadow: 0px 0px 5px 0px #000000db;
+}
+.hidden-menu li{
+    width: 100%;
+    display: flex;
+    flex-direction: revert;
+    align-items: center;
+    /* border: 1px solid red; */
+    /* color: red; */
+    border-bottom: 1px solid #c4c4c4;
+}
+
+.hidden-menu li a {
+    display: block;
+    text-decoration: none;
+    padding: 10px;
+    height: 100%;
+    color: #ffffff;
+    padding-left: 5px;
+    transition: all .3s;
+    width: 100%;
+}
+.hidden-menu li a:hover {
+    color: #ffffff;
+    padding-left: 60px;
+    background-color: #0000001a;
+}
+/*скрываем инпут чекбокс*/
+.hidden-menu-ticker {
+  display: none;
+}
+/*общие стили значка-гамбургера, самого лэйбла*/
+.btn-menu {
+  color: #000;
+  background-color: #0e5389;
+  padding: 5px;
+  position: fixed;
+  top: 15px;
+  left: 25px;
+  cursor: pointer;
+  transition: left .23s;
+  z-index: 3;
+  width: 30px;
+  -webkit-transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+}
+/*общие стили полосок*/
+.btn-menu span {
+  display: block;
+  height: 3px;
+  background-color: #ffffff;
+  margin: 5px 0 0;
+  position: relative;
+}
+/*прибиваем к верху лэйбла первую полоску*/
+.btn-menu span.first {
+  margin-top: 0;
+}
+/*при нажатии на бургер двигаем его и делаем другой фон бургеру*/
+.hidden-menu-ticker:checked ~ .btn-menu {
+  left: 260px;
+  background-color: #0e5389;
+}
+/*и дальше стили меняющие бургер, двигающие менюшку по событию - нажатие на значек бургера*/
+.hidden-menu-ticker:checked ~ .hidden-menu {
+  left: 0;
+}
+.hidden-menu-ticker:checked ~ .btn-menu span.first {
+  -webkit-transform: rotate(45deg);
+  top: 9px;
+  background-color: #ffffff;
+}
+.hidden-menu-ticker:checked ~ .btn-menu span.second {
+  opacity: 0;
+}
+
+.hidden-menu-ticker:checked ~ .btn-menu span.third {
+  -webkit-transform: rotate(-45deg);
+  top: -7px;
+  background-color: #ffffff;
+}
+
+h1 {
+  margin: 0;
+  padding: 0;
+  font-size: 17px;
+  font-weight: normal;
+}
+.link_table{
+    color:#4b7df4;
+}
+.link_return{
+    color:#67a0dd;
+}
+.link_delete{
+    color:red;
+}
+.link_return img, .link_delete img{
+    margin-right:5px;
+}
+.title_block{
+    font-size: 25px;
+    width: fit-content;
+    padding: 12px;
+    border-radius: 17px 17px 1px 1px;
+    margin-top:30px;
+    color: #0e5389;
+    border-right: 1px solid #0e5389;
+    border-left: 1px solid #0e5389;
+    border-top: 1px solid #0e5389;
+    display: block;
+}
+.tables{
+    display: flex;
+    flex-direction: column;
+    width: fit-content;
+    margin: 0 auto;
+}
+.add_button{
+    width: 120px;
+    height: 40px;
+    background-color: #0e5389;
+    color: white;
+    border: 0px;
+    pointer:;
+}
+.add_button:hover
+{
+    cursor:pointer;
+}
+.users{
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 600px;
+    margin: auto;
+    justify-content: center;
+}
+.user{
+    transition: all .3s;s
+    display: flex;
+    align-items: center;
+    border: 1px solid #a3a3a3;
+    margin: 5px;
+    width: fit-content;
+    padding: 5px;
+    border-radius: 30px;
+    cursor:pointer;
+}
+.user span{
+    font-size:12px;
+}
+
+.user_check:checked ~ label{
+    background-color:#b2ddff;
+}
+.user_check{
+    display:none;
+}
+.sticky{
+    position:fixed;
+    top:0;
+}
+.wrap{
+    overflow-x:auto;
+    max-width:100vw;
+    margin-bottom: 50px;
+}
+.wrap table{
+position:relative;
+}
+.save_success{
+z-index: 3;
+    width: 100%;
+    opacity:1;
+    transition:opacity 2s;
+    top: 10px;
+    display:none;
+    position: fixed;
+}
+.save_success p{
+
+    text-align:center;
+    width: 267px;
+    display: flex;
+    border-radius: 30px;
+    align-items: center;
+    color: #000;
+    background-color: #00ff3e6e;
+    height: 40px;
+    margin: auto;
+    padding: 10px;
+}
+.save_success span{
+    margin:auto;
+}
+.active{
+    opacity:0;
+}
+.all_user{
+        display: flex;
+    align-items: center;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.card_user{
+    max-width: 400px;
+    /* flex-direction: column; */
+    box-shadow: 0px 0px 5px #c9c9c9;
+    margin: 8px;
+    display: flex;
+    padding: 15px;
+    background-color: #0e5389;
+    border: 1px solid #0e5389;
+}
+.firstname_user{
+}
+.info_user{
+        display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+.username{
+    width: 100%;
+    color: #ffffff;
+    text-align: end;
+    border-bottom: 1px solid #6893b5;
+    margin-bottom:10px;
+}
+.card_user img{
+    align-self: center;
+    margin-right:30px;
+    border-radius:100%;
+}
+.info_user p{
+    margin:2px;
+    color:white;
+    font-size:14px;
+}
+.form_user{
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    width:70%;
+    margin: 20px auto;
+    box-shadow: 0px 0px 3px #9f9f9f;
+    border: 1px solid #bebebe;
+    padding: 20px;
+    margin-top: 10px;
+}
+.wrap_input{
+    display: flex;
+    margin: 10px;
+    justify-content: space-between;
+        flex-direction: column;
+}
+.wrap_input input{
+    width:100%;/*200px;*/
+    border: 1px solid #004b83;/*border: 1px solid #394dca;*/
+    padding: 3px;
+    height: 20px;
+    border-radius: 4px;
+    outline-color: #00d2ff;
+    font-family: 'Raleway';
+}
+.form_user a{
+      appearance: button;
+    -webkit-writing-mode: horizontal-tb !important;
+    text-rendering: auto;
+    color: -internal-light-dark(black, white);
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    background-color: -internal-light-dark(rgb(239, 239, 239), rgb(59, 59, 59));
+    box-sizing: border-box;
+    margin: 0em;
+    font: 400 13.3333px Arial;
+    padding: 1px 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: -internal-light-dark(rgb(118, 118, 118), rgb(133, 133, 133));
+    border-image: initial;
+}
+.form_user button, .sign button, .form_user a{
+    border: 0px;
+    background-color: #0e5389; /*#59bdff;*/
+    padding: 10px;
+    color: white;
+    cursor: pointer;
+    width: 120px;
+    font-family: 'Raleway';
+    font-size: 14px;
+    box-shadow: 0px 0px 3px 0px #8c8c8c;
+    margin: 0px auto;
+    margin-top: 20px;
+}
+
+.sign{
+    display:block;
+}
+.sign form{
+        max-width: 420px;
+        width:70%;
+    flex-direction: column;
+    justify-content: center;
+    display: flex;
+    height: 330px;
+    margin: 0 auto;
+    /* display: block; */
+    margin-top: 80px;
+    margin-bottom:20px;
+    box-shadow: 0px 0px 4px #dddddd;
+    padding: 30px;
+    border: 1px solid #dfdfdf;
+    padding-top: 15px;
+}
+.sign input{
+    width:250px;
+}
+.sign img{
+width:100%;
+    margin:0 auto;
+    display:block;
+}
+.sign label{
+    font-size:20px;
+    color:#0e5389;
+}
+
+#profile{
+    display:flex;
+    width:1200px;
+    flex-wrap:wrap;
+    margin:40px auto;
+    justify-content:center;
+
+}
+.profile_photo{
+    width:360px;
+}
+.profile_photo img{
+    border-radius:100%;
+    height:200px;
+    width:200px;
+}
+.profile_info{
+    width:70%;
+}
+.profile_img{
+    margin-bottom: 10px;
+    border: 1px solid grey;
+}
+.profile_menu{
+padding-top: 10px;
+    display: flex;
+    border-top: 1px solid #c5c5c5;
+    flex-direction: column;
+    width:200px;
+}
+.profile_head{
+        text-align: end;
+    border-bottom: 1px solid #0e5389;
+}
+
+
+//--------------------------------------------------------------------------------------
+//---------------------------Тут начинается платформа для тестов------------------------
+//--------------------------------------------------------------------------------------
+
+
+
+
+    .tabs {
+      max-width: 90%;
+      margin:100px auto;
+    }
+
+    .tabs>input[type="radio"] {
+      display: none;
+      width:35px;
+    }
+
+    .tabs>input[type="radio"]:checked+label {
+      background-color: #bdbdbd;
+    }
+
+    .tabs>div {
+      border: 1px solid #ddd;
+      padding: 10px 15px;
+      border-radius: 4px;
+    }
+
+    /* отобразить контент, связанный с вабранной радиокнопкой (input type="radio") */
+
+    .tabs>label {
+      display: inline-block;
+      text-align: center;
+      vertical-align: middle;
+      user-select: none;
+      background-color: #eee;
+      border: 1px solid transparent;
+      padding: 2px 8px;
+      font-size: 16px;
+      line-height: 1.5;
+      border-radius: 4px;
+      transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+      margin-left: 6px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    .tabs>label:first-of-type {
+      margin-left: 0;
+    }
+    .test li{
+      margin:10px auto;
+      display: flex;
+    align-items: center;
+    }
+    .test li input{
+      margin-right:15px;
+    }
+    .logo{
+    display:flex;
+        border-bottom: 1px solid #cacaca;
+    }
+    .logo div{
+        display:flex;
+        justify-content:center;
+        flex-direction:column;
+    }
+    .logo div span{
+     font-family: 'Charm', cursive;
+    font-size: 27px;
+    color: #268dfd;}
+
+.testItem{
+    width: 80%;
+    border-radius: 20px;
+    margin: 20px auto;
+    border: 2px solid #b1b1b1;
+    padding: 30px;
+
+}
+.testItemVariant{
+    display:flex;
+    margin:10px auto;
+    flex-direction:row;
+}
+.testItemQuestion{
+    margin:0 auto;
+    flex-direction:column;
+    display:flex;
+}
+.testItemQuestion textarea{
+    height:100px;
+    border: 1px solid #9c9c9c;
+    font-size:16px;
+}
+.testItemVariant input{
+        width: 360px;
+    height: 19px;
+    margin-left: 5px;
+    border: 1px solid #9c9c9c;
+    margin-bottom: 2px;
+}
+.inputTestName{
+    border: 2px solid #79b2d8;
+    height: 24px;
+    font-size: 20px;
+    border-radius: 30px;
+    outline: none;
+    text-align:center;
+    margin-bottom:10px;
+}
+#sendFormTest{
+    margin-top:20px;
+}
+#sendFormTest button{
+    margin: auto;
+    display: block;
+    width: 180px;
+    height: 35px;
+    background-color: #0e5389;
+    color: white;
+    border: 0px;
+    pointer: ;
+    cursor: pointer;
+}
+.test_list{
+    width:80%;
+    margin:0 auto;
+}
+.pred_test_button{
+        color: white;
+    background-color:#5dde60;// #99e299;
+    margin: 0 auto;
+    padding: 6px 20px;
+    display: block;
+    width: fit-content;
+    transition:all .3s;
+}
+.pred_test_button:hover{
+    background-color:#99e299;
+}
+.addVariant{
+    color: grey;
+    padding: 8px 10px;
+    background: #e3e3e3;
+    width: 150px;
+    border-radius:36px;
+    text-align: center;
+    cursor: pointer;
+}
+.testlinks{
+    background-color: #191919 !important;
+    color: white !important;
+}
+.tablinks span{
+        width: 150px;
+    outline: 0px;
+}
+.tablinks img{
+        left: 40px;
+    position: relative;
+    transition:all 0.3s;
+    background-color:#ddd;
+    border-radius:10px;
+}
+.tablinks:hover img{
+    left:0px;
+}
+.tablinks img:hover{
+border-radius:10px;
+padding:1px;
+        background-color: #ffffff;
+}
+.addInputs{
+ width: 120px;
+            text-align: center;
+            padding: 9px;
+            border-radius: 30px;
+            margin: 10px 10%;
+            cursor: pointer;
+            color: #515151;
+}
+.testlinks:hover{
+    background-color:#4d4d4d !important;
+}
+.testItemQuestion label{
+    display:block !important;
+}
+.testItemVariant label{
+    display:block !important;
+}
+.testlinks.activeLink{
+background-color:#ddd;
+}
+.tabs_questions>input{
+    display: none;
+    width: 35px;
+}
+.tabs_questions>div{
+    display:none;
+}
+.tabs_questions label{
+    margin-top:15px;
+    background:none;
+}

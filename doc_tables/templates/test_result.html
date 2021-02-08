@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+  svg path {
+  will-change: auto;
+  stroke-width: 20px;
+  stroke-miterlimit: round;
+  transition: stroke-dashoffset 850ms ease-in-out;
+}
+.spanUserName{
+    border-bottom: 1px solid #0e5389;
+    color: #0e5389;
+    font-size: 21px;
+    border-right: 1px solid #0e5389;
+    border-radius: 10px 0px;
+    padding: 0px 5px 5px 5px;
+}
+.svgPic{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+</style>
+{% endblock %}
+{% block content %}
+<span class="spanUserName">{{ request.user.first_name }}
+        {{ request.user.last_name }}</span>
+    <div class="svgPic">
+        <svg xmlns="http://www.w3.org/2000/svg" height="200" width="200" viewBox="0 0 200 200" data-value="{{ percent }}">
+  <path class="bg" stroke="#ccc" d="M41 149.5a77 77 0 1 1 117.93 0" fill="none"></path>
+  <path class="meter" stroke="#09c" d="M41 149.5a77 77 0 1 1 117.93 0" fill="none" stroke-dasharray="350" stroke-dashoffset="350" style="stroke-dashoffset: 209.711;"></path>
+</svg>
+        <span style="    margin-top: -135px;
+    font-size: 37px;
+    color: #0099cc;">{{ percent }}%</span>
+    </div>
+<p style="
+    margin-top: 65px;
+    text-align: center;
+    color: #0099cc;
+">Результаты теста: {{ result }} из {{ total }}</p>
+<p><a href="{% url 'index' %}" style="margin: auto;
+    display: table;
+    margin: 20px auto;
+    background-color: #0e5389;
+    box-shadow: 0px 0px 4px #aeaeae;
+    color: white;
+    padding: 10px 10px;
+}">Вернуться на главную</a></p>
+{% endblock %}
+{% block script %}
+<script>
+    const meters = document.querySelectorAll('svg[data-value] .meter');
+
+meters.forEach( (path) => {
+  let length = path.getTotalLength();
+  let value = parseInt(path.parentNode.getAttribute('data-value'));
+  let to = length * ((100 - value) / 100);
+  path.getBoundingClientRect();
+  path.style.strokeDashoffset = Math.max(0, to);
+});
+</script>
+{% endblock %}

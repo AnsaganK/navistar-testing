@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% load navistar_tags %}
+{% block content %}
+<div style="overflow:auto;max-width:100vw;margin:30px auto;">
+    <table>
+        <thead>
+        <tr>
+            <td>Название</td>
+            <td>Дата</td>
+            <td>Баллы</td>
+            <td>%</td>
+        </tr>
+        </thead>
+        <tbody>
+{% for i in children %}
+        <tr>
+            <td>{{ i.test.name }}</td>
+            <td>{{ i.date_end }}</td>
+            <td>{{ i.right_answer }} из {{ i.count_answer }}</td>
+            <td>{{ i.count_answer|returnPercent:i.right_answer }}</td>
+        </tr>
+{% endfor %}
+        </tbody>
+    </table>
+</div>
+<a href="/" style="    margin: auto;
+    display: table;
+    margin: 20px auto;
+    background-color: #0e5389;
+    box-shadow: 0px 0px 4px #aeaeae;
+    color: white;
+    padding: 10px 10px;
+}">Вернуться на главную</a>
+{% endblock %}

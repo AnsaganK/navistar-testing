@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% block head %}
+<style>
+  .form-group {
+    margin-bottom: 1rem;
+    display: inline-grid;
+    display: flex;
+    justify-content: space-between;
+}
+.sign h3{
+  text-align:center;
+  margin:auto;
+}
+.sign h3{
+  text-align:center;
+}
+.sign input[type = "submit"]{
+  margin: 0px auto;
+    font-size: 17px;
+    margin-top: 30px;
+    border: 0px;
+    box-shadow: 0px 0px 3px #0e5389;
+        color: white;
+    background-color: #0e5389;
+    // #99e299: ;
+    margin: 30px auto;
+    padding: 6px 20px;
+    display: block;
+    width: fit-content;
+    transition: all .3s;
+    cursor:pointer;
+}
+.sign form {
+    max-width: 420px;
+    width: 100%;
+    flex-direction: column;
+    justify-content: center;
+    display: flex;
+    height: 330px;
+    margin: 0px;
+    box-shadow: 0px 0px 4px #dddddd;
+    padding: 30px;
+    border: 1px solid #dfdfdf;
+    padding-top: 15px;
+}
+.sign h3 {
+    text-align: center;
+    margin: auto;
+    font-size: 18px;
+}
+.title_block{
+  border:0px;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div class="main">
+  <div class="sign" style="
+    margin: 10px auto;display:table;
+">
+  <h3 class="title_block">Регистрация</h3>
+  <form method="post" action='{% url "signup" %}?next={% if test_slug %}{{ test_slug }}{% else %}/{% endif %}'>
+    {% csrf_token %}
+    <!--{{ form.as_p }}-->
+    {% if word %}
+    <p style="color:red">Пароли не совпадают</p>
+    {% endif %}
+
+    {% if word2 %}
+    <p style="color:red">Пользователь с таким логином уже существует</p>
+    {% endif %}
+    <div class="form-group">
+      <label for="formGroupExampleInput">Логин</label>
+      <input type="text" name="username" maxlength="30" autofocus="" required="" id="id_username">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Имя</label>
+      <input type="text" name="first_name" required="" maxlength="30" id="id_first_name">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput">Фамилия</label>
+      <input type="text" name="last_name" required="" maxlength="30" id="id_last_name">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Пароль</label>
+      <input type="password" minlength="5" name="password1" autocomplete="new-password" required="" id="id_password1">
+    </div>
+    <div class="form-group">
+      <label for="formGroupExampleInput2">Пароль(повтор)</label>
+      <input type="password" minlength="5" name="password2" autocomplete="new-password" required="" id="id_password2">
+    </div>
+    <input type="submit" value="Зарегистрироваться" />
+  </form>
+    <a href="{% url 'login' %}"     style="margin: auto;
+    margin-top: 30px;
+    display: table;
+    color: #0e5389;"
+    >Войти</a>
+  </div>
+</div>
+{% endblock %}

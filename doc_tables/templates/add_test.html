@@ -1,0 +1,597 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block head %}
+<script type="text/javascript" src='{% static "ckeditor/ckeditor-init.js" %}'></script>
+<script type="text/javascript" src='{% static "ckeditor/ckeditor/ckeditor.js" %}'></script>
+<style>
+.revoveImg{
+    height:15px;
+}
+.tabs>label:first-of-type {
+    margin-left: 0px;
+}
+    #tab-btn-1:checked~#content-1,
+    #tab-btn-2:checked~#content-2{
+      display: block;
+      width:90%;
+      margin:0 auto;
+      border-color: #0e5389;
+    }
+
+.tabs>label {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    background-color: #ffffff;
+    border: 1px solid #0e5389;
+    padding: 6px 28px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 0px;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+    margin-left: -4px;
+    cursor: pointer;
+    margin-bottom: 0px;
+    border-bottom:0px;
+}
+.tabs>input[type="radio"]:checked+label {
+    background-color: #0e5389;
+    color:white;
+}
+.tabs>div {
+    display: none;
+    border: 1px solid #5ac0e6;
+    padding: 10px 15px;
+    border-radius: 4px;
+    }
+</style>
+<style>
+/* Style the tab */
+.tab {
+    float: left;
+    border: 1px solid #ccc;
+    background-color: #f1f1f1;
+    border-right:0px;
+}
+
+/* Style the buttons inside the tab */
+.tab .tablinks {
+    display: block;
+    display:flex;
+    justify-content:space-between;
+        align-items: center;
+    background-color: inherit;
+    color: black;
+    padding: 10px 16px;
+    width: 170px;
+    border: none;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 17px;
+    padding-left:30px;
+}
+
+/* Change background color of buttons on hover */
+.tab .tablinks:hover {
+    background-color: #ddd;
+}
+
+/* Create an active/current "tab button" class */
+.tab .tablinks.activeLink {
+    background-color: #bdd1e1;
+}
+
+/* Style the tab content */
+.tabcontent {
+    float: left;
+    width:-webkit-fill-available;
+    padding: 0px;
+    border-left: none;
+}
+.tabcontent p{
+    margin:0px;
+}
+.tabcontent h3{
+    text-align:center;
+}
+.tabcontent label{
+    display:none;
+}
+.accordion {
+    background-color: #0e5389;
+    color: #fff;
+    cursor: pointer;
+    padding: 16px;
+    width: auto;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 18px;
+    transition: 0.5s;
+}
+.activeAccordion, .accordion:hover {
+    background-color: #0e5389d6;
+}
+
+.accordion:after {
+    content: '\002B';
+    color: #fff;
+  font-size: 18px;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.activeAccordion:after {
+    content: "\2212";
+}
+
+.panel {
+  color: #212121;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+.tablinks span{
+        width: 150px;
+    outline: 0px;
+}
+</style>
+{% endblock %}
+
+
+{% block content %}
+<form action="{% url 'add_test' %}" method="post" id="sendFormTest" name="sendFormTest">
+    {% csrf_token %}
+    <input type="text" name="content_data" id="content_data" style="display:none">
+    <div class="tabs">
+        <input type="radio" name="tab-btn" id="tab-btn-1" value="" checked>
+        <label for="tab-btn-1" style="
+    border-top-left-radius: 10px;margin-left:10%;
+">Контент</label>
+        <input type="radio" name="tab-btn" id="tab-btn-2" value="">
+        <label for="tab-btn-2" style="
+    border-top-right-radius: 10px;margin-left:-10px;
+">Итоговый тест</label>
+        <div id="content-1" style="padding:0px;">
+            <div class="testName"  style="margin:10px auto;display:flex;flex-direction:column;text-align:center;width:80%;max-width:500px;">
+                    <label>Название теста</label>
+                    <input type="text" name="testName" class="inputTestName">
+                </div>
+                <!--<ul class="users">
+                {% for i in users %}
+                            {% if i.pk != request.user.pk %}
+                            <li>
+                                <input type="checkbox" class="user_check" id="{{ i.pk }}" name="user_{{ i.pk }}">
+                                <label class="user" style="display: flex;align-items: center;" for="{{ i.pk }}">
+                                    <img src="{% if i.profile.photo %}{{ i.profile.photo.url }}{% else %}{% static 'anonym.png' %}{% endif %}" width="30" style="border-radius:30px;" alt="">
+                                    <span class="title">{{ i.username }}</span>
+                                </label>
+                            </li>
+                            {% endif %}
+                    {% endfor %}
+                </ul>
+                -->
+                <div style="width:100%;display:flex;justify-content:center;">
+
+                    <div class="tab">
+                        <div>
+                        <div id="tab">
+                            <div class="accordion" onclick="AccOpen(this)" contenteditable>Модуль 1</div>
+                            <div class="panel" id="panel_1_parent" data-mod-id="1">
+                                <div id="panel_1">
+                                    <div class="tablinks itemTab" onclick="openCity(event, 'm_1')" id="defaultOpen" data-tab-id="1"><span contenteditable>1 тема</span></div>
+                                </div>
+                                    <div style="display: flex;">
+                                        <div class="tablinks" onclick="addTest('panel_1')" style="color:grey;width: 50%;">+ Тест</div>
+                                        <div class="tablinks" onclick="addModule('panel_1')" style="color:grey;width: 50%;">+ Тему</div>
+                                    </div>
+                            </div>
+                        </div>
+                            <div class="tablinks" onclick="addBaseModule()" style="width: auto;color: #fff;background: #3f7ba9d6;border-top: 1px solid #aad0ff;border-bottom: 1px solid #aad0ff;padding: 10px 16px;">+ Добавить модуль</div>
+                       </div>
+                    </div>
+
+                    <div class="main" id="main" style="width:100%;">
+                        <div id="m_1" data-content-id="1" class="tabcontent">
+                          <div style="margin:auto;">
+                                {{ form.media }}
+                                {{ form.as_p }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+        </div>
+        <div id="content-2">
+            <div id="testInputs">
+                {% for i in range %}
+                <div class="testItem" id="testItem_{{ i }}" data-question-id="{{ i }}" style="">
+                    <div class="testItemQuestion"><label for="">Вопрос {{ i }} </label><textarea type="text" name="question_{{i}}" style="max-width:100%;"></textarea></div>
+                    <div id="testItemVariants_{{ i }}">
+                        <div class="testItemVariant"><label for="">1)</label><input type="checkbox" data-variant-id="1" style="width:40px;" name="r_{{i}}_1"><input type="text" name="v_{{i}}"></div>
+                        <div class="testItemVariant"><label for="">2)</label><input type="checkbox" data-variant-id="2" style="width:40px;" name="r_{{i}}_2"><input type="text" name="v_{{i}}"></div>
+                        <div class="testItemVariant"><label for="">3)</label><input type="checkbox" data-variant-id="3" style="width:40px;" name="r_{{i}}_3"><input type="text" name="v_{{i}}"></div>
+                        <div class="testItemVariant"><label for="">4)</label><input type="checkbox" data-variant-id="4" style="width:40px;" name="r_{{i}}_4"><input type="text" name="v_{{i}}"></div>
+                    </div>
+                    <div style="display:flex;justify-content: space-between;width: 432px;">
+                        <div class="addVariant" style="background: #b3ffa0;" class="addVariant" onclick='addVariant({{ i }},this.parentElement.previousElementSibling)'>Добавить вариант</div>
+                        <div class="addVariant" style="background: #ffa0a0;" class="addVariant" onclick='delVariant({{ i }},this.parentElement.previousElementSibling)'>Удалить вариант</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div style="display: flex;
+            justify-content: space-between;">
+            <div onclick="addInput(this.parentElement.previousElementSibling)" class="addInputs" style="
+            border: 2px solid #60ec63;
+            background-color: #a0ff7f;">+1 вопрос</div>
+            <div onclick="delInput(this.parentElement.previousElementSibling)" class="addInputs" style="
+            border: 2px solid #fd3535;
+            background-color: #ff6262;">-1 вопрос</div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <button style="
+    /* float: right; */
+    padding: 10px;
+    background-color: #0e5389;
+    border: 1px solid #c9c9c9;
+    cursor: pointer;
+    margin: 20px auto;
+    /* margin: auto; */
+    display: block;
+    " onclick="blue(event, this)">Создать тест</button>
+</form>
+<p style="
+    margin-left: 5%;
+    color: grey;
+">*Не давайте модулям и темам названия с кавычками(кавычки = "" и '') </p>
+{% endblock %}
+
+
+{% block script %}
+<script>
+function addVariant(variant_id=null,vs){
+    let v = vs.children[vs.children.length-1];
+    let v_id = v.children[1].getAttribute("data-variant-id");
+    v_id++;
+    let p = document.createElement("div");
+    p.classList.add("testItemVariant");
+    p.innerHTML = '<label for="">'+v_id+')</label><input type="checkbox" data-variant-id="'+v_id+'" style="width:40px;" name="r_'+variant_id+'_'+v_id+'"><input type="text" name="v_'+variant_id+'">'
+    vs.appendChild(p);
+}
+function delVariant(variant_id=null, vs){
+    if (vs.children.length > 1){
+        let v = vs.children[vs.children.length-1];
+        v.remove();
+    }
+}
+  function AccOpen(el) {
+    el.classList.toggle("activeAccordion");
+    var panel = el.nextElementSibling;
+    if (panel.style.maxHeight){
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    }
+  }
+function addBaseModule() {
+    let tab = document.getElementById('tab');
+    panels = document.getElementsByClassName('panel');
+    let b = 0;
+    let zero = 0;
+    for (let i=0; i<panels.length; i++ ){
+        let a = panels[i];
+        zero++;
+        if(+a.getAttribute('data-mod-id')>+b){
+            b = a.getAttribute('data-mod-id');
+        }
+    }
+    zero++;
+    b++;
+    let acc =  document.createElement('div');
+    acc.classList.add("accordion");
+    acc.setAttribute("contenteditable","true");
+    acc.setAttribute("onclick","AccOpen(this)");
+    acc.innerHTML = "Модуль "+zero;
+
+    let baseAddEl = document.createElement('div');
+    baseAddEl.style.display = "flex";
+
+    let addEl2 = document.createElement('div');
+    addEl2.classList.add("tablinks");
+    addEl2.style.color = "grey";
+    addEl2.style.width = "50%";
+    addEl2.setAttribute("onclick", 'addTest("panel_'+b+'")');
+    addEl2.innerHTML = '+ Тест';
+
+    let addEl = document.createElement('div');
+    addEl.classList.add("tablinks");
+    addEl.style.color = "grey";
+    addEl.style.width = "50%";
+    addEl.setAttribute("onclick", 'addModule("panel_'+b+'")');
+    addEl.innerHTML = '+ Тему';
+
+    baseAddEl.appendChild(addEl2);
+    baseAddEl.appendChild(addEl);
+
+    let p = document.createElement('div');
+    p.id = "panel_"+b+"_parent";
+    p.classList.add("panel");
+    p.setAttribute("data-mod-id",b);
+    let p2 = document.createElement('div');
+    p2.id = "panel_"+b
+    p.appendChild(p2);
+    p.appendChild(baseAddEl);
+
+    tab.appendChild(acc);
+    tab.appendChild(p);
+}
+function addTest(panel) {
+    main = document.getElementById("main");
+            let len = document.getElementsByClassName('itemTab')
+            re = len.length;
+            re++;
+            console.log(re)
+            let el = main.children[main.children.length-1];
+            let count = el.getAttribute('data-content-id');
+            count++;
+            let p = document.createElement('div');
+            p.id = "m_"+count;
+            p.classList.add("tabcontent");
+            p.setAttribute("data-content-id",count);
+            p.style.display = "none";
+            p.innerHTML = '<input name="'+ 'content_'+ count +'_test" style="display:contents;"><div><div class="testItem" data-question-id="1" style=""><div class="testItemQuestion"><label for="">Вопрос 1 </label><textarea type="text" style="max-width:100%;"></textarea></div><div><div class="testItemVariant"><label for="">1)</label><input type="checkbox" style="width:40px;" data-variant-id="1"><input type="text" ></div><div class="testItemVariant"><label for="">2)</label><input type="checkbox" data-variant-id="2" style="width:40px;"><input type="text"></div><div class="testItemVariant"><label for="">3)</label><input type="checkbox" data-variant-id="3" style="width:40px;"><input type="text"></div><div class="testItemVariant"><label for="">4)</label><input type="checkbox" data-variant-id="4" style="width:40px;"><input type="text"></div></div><div style="display:flex;justify-content: space-between;width: 432px;"><div class="addVariant" style="background: #b3ffa0;" class="addVariant" onclick=\'addVariant("'+re+'",this.parentElement.previousElementSibling)\'>Добавить вариант</div><div class="addVariant" style="background: #ffa0a0;" class="addVariant" onclick=\'delVariant("'+re+'",this.parentElement.previousElementSibling)\'>Удалить вариант</div></div></div></div><div style="display: flex;justify-content: space-between;"><div onclick=\'easyAddInput(this.parentElement.previousElementSibling)\' class="addInputs" style="border: 2px solid #60ec63;background-color: #a0ff7f;">+1 вопрос</div><div onclick=\'delInput(this.parentElement.previousElementSibling)\' class="addInputs" style="border: 2px solid #fd3535;background-color: #ff6262;">-1 вопрос</div></div>'
+            main.appendChild(p);
+    tabcontent = document.getElementById(panel);
+
+    itemTabs = document.getElementsByClassName('itemTab');
+    let b = 0;
+    for (let i=0; i<itemTabs.length; i++){
+        let a = itemTabs[i];
+        if(+a.getAttribute('data-tab-id')>+b){
+            b = a.getAttribute('data-tab-id');
+        }
+    }
+    b++;
+    if (tabcontent.innerText == ''){
+            let p = document.createElement('div');
+            p.classList.add("tablinks");
+            p.classList.add("testlinks");
+            p.classList.add("itemTab");
+            p.setAttribute("data-tab-id",b);
+            p.setAttribute('onclick', "openCity(event, 'm_"+b+"')");
+            p.innerHTML ="<span contenteditable>1 тест</span>"+'<img src="{% static 'remove2.png' %}" onclick="delete_tems('+b+')" height=15>';
+            tabcontent.appendChild(p);
+            document.getElementById(panel+'_parent').style.maxHeight = tabcontent.scrollHeight+120 + "px";
+    }
+    else{
+            let el = tabcontent.children[tabcontent.children.length-1];
+            let count = tabcontent.children.length;
+            count++;
+            let p = document.createElement('div');
+            p.classList.add("tablinks");
+            p.classList.add("testlinks");
+            p.classList.add("itemTab");
+            p.setAttribute("data-tab-id", +b);
+            p.setAttribute('onclick', "openCity(event, 'm_"+b+"')");
+            p.innerHTML = '<span contenteditable>'+count+" тест</span>"+'<img src="{% static 'remove2.png' %}" onclick="delete_tems('+b+')" height=15>';
+            let panel_parent = document.getElementById(panel+'_parent')
+            panel_parent.style.maxHeight = tabcontent.scrollHeight+120 + "px";
+            tabcontent.appendChild(p);
+    }
+}
+function addModule(panel) {
+    main = document.getElementById("main");
+            let el = main.children[main.children.length-1];
+            let count = el.getAttribute('data-content-id');
+            count++;
+            let p = document.createElement('div');
+            p.id = "m_"+count;
+            p.classList.add("tabcontent");
+            p.setAttribute("data-content-id",count);
+            p.style.display = "none";
+            p.innerHTML = '<div style="margin:auto;"><p><label for="id_content">Описание:</label> <textarea name="'+ 'content_'+ count +'" cols="40" rows="10" class="ckeditor" required id="id_content"></textarea></p></div>';
+            main.appendChild(p);
+            CKEDITOR.replace('content_'+ count);
+
+    tabcontent = document.getElementById(panel);
+
+    itemTabs = document.getElementsByClassName('itemTab')
+    let b = 0;
+    for (let i=0; i<itemTabs.length; i++){
+        let a = itemTabs[i];
+        if(+a.getAttribute('data-tab-id')>+b){
+            b = a.getAttribute('data-tab-id');
+        }
+    }
+    b++;
+    if (tabcontent.innerText == ''){
+            let p = document.createElement('div');
+            p.classList.add("tablinks");
+            p.classList.add("itemTab");
+            p.setAttribute("data-tab-id",b);
+            p.setAttribute('onclick', "openCity(event, 'm_"+b+"')");
+            p.innerHTML = "<span contenteditable>1 тема</span>"+'<img src="{% static 'remove2.png' %}" onclick="delete_tems('+b+')" height=15>';
+            tabcontent.appendChild(p);
+            document.getElementById(panel+'_parent').style.maxHeight = tabcontent.scrollHeight+120 + "px";
+    }
+    else{
+            let el = tabcontent.children[tabcontent.children.length-1];
+            let count = tabcontent.children.length;
+            count++;
+            let p = document.createElement('div');
+            p.classList.add("tablinks");
+            p.classList.add("itemTab");
+            p.setAttribute("data-tab-id", +b);
+            p.setAttribute('onclick', "openCity(event, 'm_"+b+"')");
+            p.innerHTML = '<span contenteditable>'+count+" тема</span>"+'<img src="{% static 'remove2.png' %}" onclick="delete_tems('+b+')" height=15>';
+            tabcontent.appendChild(p);
+            let panel_parent = document.getElementById(panel+'_parent')
+            panel_parent.style.maxHeight = tabcontent.scrollHeight+120 + "px";
+            tabcontent.appendChild(p);
+    }
+}
+function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" activeLink", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " activeLink";
+}
+
+document.getElementById("defaultOpen").click();
+</script>
+<script>
+function easyAddInput(testInputs){
+        if (testInputs.innerText == ''){
+            testInputs.innerHTML+='<div class="testItem" data-question-id="1" style=""><div class="testItemQuestion"><label for="">Вопрос 1 </label><textarea type="text" style="max-width:100%;"></textarea></div><div class="testItemVariant"><label for="">1)</label><input type="checkbox" style="width:40px;"><input type="text"></div><div class="testItemVariant"><label for="">2)</label><input type="checkbox" style="width:40px;"><input type="text"></div><div class="testItemVariant"><label for="">3)</label><input type="checkbox" style="width:40px;"><input type="text"></div><div class="testItemVariant"><label for="">4)</label><input type="checkbox" style="width:40px;"><input type="text"></div></div>';
+        }
+        else{
+            let el = testInputs.children[testInputs.children.length-1];
+            let count = el.getAttribute('data-question-id');
+            let p = document.createElement('div');
+            p.classList.add("testItem");
+            p.setAttribute("data-question-id",+count+1);
+            p.innerHTML = '<div class="testItemQuestion" id="testItem_'+(+count+1)+'"><label for="">Вопрос '+ (+count+1) +' </label><textarea type="text" style="max-width:100%;"></textarea></div><div id="testItemVariants_'+ (+count+1) +'"><div class="testItemVariant"><label for="">1)</label><input type="checkbox" data-variant-id="1" style="width:40px;"><input type="text"></div><div class="testItemVariant"><label for="">2)</label><input type="checkbox" data-variant-id="2" style="width:40px;"><input type="text"></div><div class="testItemVariant"><label for="">3)</label><input type="checkbox" data-variant-id="3" style="width:40px;"><input type="text"></div><div class="testItemVariant"><label for="">4)</label><input type="checkbox" data-variant-id="4" style="width:40px;"><input type="text"></div></div><div style="display:flex;justify-content: space-between;width: 432px;"><div class="addVariant" style="background: #b3ffa0;" class="addVariant" onclick="addVariant('+(+count+1)+',this.parentElement.previousElementSibling)">Добавить вариант</div><div class="addVariant" style="background: #ffa0a0;" class="addVariant" onclick="delVariant('+(+count+1)+',this.parentElement.previousElementSibling)">Удалить вариант</div></div>';
+            testInputs.appendChild(p);
+        }
+    }
+    function addInput(testInputs){
+        if (testInputs.innerText == ''){
+            testInputs.innerHTML+='<div class="testItem" data-question-id="1" style=""><div class="testItemQuestion"><label for="">Вопрос 1 </label><textarea type="text" name="question_1" style="max-width:100%;"></textarea></div><div class="testItemVariant"><label for="">1)</label><input type="checkbox" style="width:40px;" name="r_1_1"><input type="text" name="v_1"></div><div class="testItemVariant"><label for="">2)</label><input type="checkbox" style="width:40px;" name="r_1_2"><input type="text" name="v_1"></div><div class="testItemVariant"><label for="">3)</label><input type="checkbox" style="width:40px;" name="r_1_3"><input type="text" name="v_1"></div><div class="testItemVariant"><label for="">4)</label><input type="checkbox" style="width:40px;" name="r_1_4"><input type="text" name="v_1"></div></div>';
+        }
+        else{
+            let el = testInputs.children[testInputs.children.length-1];
+            let count = el.getAttribute('data-question-id');
+            let p = document.createElement('div');
+            p.classList.add("testItem");
+            p.setAttribute("data-question-id",+count+1);
+            p.innerHTML = '<div class="testItemQuestion" id="testItem_'+(+count+1)+'"><label for="">Вопрос '+ (+count+1) +' </label><textarea type="text" name="question_'+ (+count+1) +'" style="max-width:100%;"></textarea></div><div id="testItemVariants_'+ (+count+1) +'"><div class="testItemVariant"><label for="">1)</label><input type="checkbox" data-variant-id="1" style="width:40px;" name="r_'+ (+count+1) +'_1"><input type="text" name="v_'+ (+count+1) +'"></div><div class="testItemVariant"><label for="">2)</label><input type="checkbox" data-variant-id="2" style="width:40px;" name="r_'+ (+count+1) +'_2"><input type="text" name="v_'+ (+count+1) +'"></div><div class="testItemVariant"><label for="">3)</label><input type="checkbox" data-variant-id="3" style="width:40px;" name="r_'+ (+count+1) +'_3"><input type="text" name="v_'+ (+count+1) +'"></div><div class="testItemVariant"><label for="">4)</label><input type="checkbox" data-variant-id="4" style="width:40px;" name="r_'+ (+count+1) +'_4"><input type="text" name="v_'+ (+count+1) +'"></div></div><div style="display:flex;justify-content: space-between;width: 432px;"><div class="addVariant" style="background: #b3ffa0;" class="addVariant" onclick="addVariant('+(+count+1)+',this.parentElement.previousElementSibling)">Добавить вариант</div><div class="addVariant" style="background: #ffa0a0;" class="addVariant" onclick="delVariant('+(+count+1)+',this.parentElement.previousElementSibling)">Удалить вариант</div></div>';
+            testInputs.appendChild(p);
+        }
+    }
+    function delInput(testInputs){
+        if (testInputs.children.length>1){
+            let el = testInputs.children[testInputs.children.length-1];
+            el.remove();
+        }
+    }
+
+    function blue(e, t){
+        e.preventDefault();
+        let accordions = document.getElementsByClassName("accordion");
+        let panels = document.getElementsByClassName("panel");
+        let obj = '['
+        for (let i=0; i<accordions.length; i++){
+            panel = accordions[i].nextElementSibling;
+            let tabLink = panel.children[0];
+            console.log(accordions[i].innerText);
+            if (accordions[i].innerText == ''){
+                continue
+            }
+            let p = '['
+            let arr = '[';
+            for (let j=0; j<tabLink.children.length; j++){
+                let module = '[';
+                let a = tabLink.children[j].getAttribute("data-tab-id");
+                module += '"'+a+'",';
+                if(tabLink.children[j].innerText!=''){
+                    module += '"'+tabLink.children[j].innerText+'"],';
+                }else{
+                    continue
+                    module += '"'+tabLink.children[j].innerText+'"';
+                }
+                arr += module
+            }
+            arr = arr.substring(0, arr.length - 1);
+            console.log("12213123 = "+arr);
+
+            let z = accordions[i].innerText;
+            p += '"'+z+'",';
+            if(arr!=''){
+                arr+="]";
+            }else{
+                p = p.substring(0, p.length - 1);
+            }
+            p += arr+"]";
+            console.log(p);
+            obj += p+",";
+        }
+        obj = obj.substring(0, obj.length - 1);
+        obj += "]"
+        console.log(obj);
+
+
+        let inp = document.getElementById('content_data');
+        inp.value = obj;
+
+        tests = document.getElementsByClassName('testlinks');
+        for (let k=0; k<tests.length; k++){
+            test_id = tests[k].getAttribute('data-tab-id');
+            test_content = document.getElementById('m_'+test_id);
+            console.log(test_content);
+            let parseHtmlToArr = parseContentTest(test_content.children[1])
+            test_content.children[0].setAttribute('value',parseHtmlToArr);
+        }
+        let form = document.getElementById('sendFormTest');
+        form.submit()
+    }
+function delete_tems(ID){
+    let tab = document.querySelector('.tablinks[data-tab-id="'+ID+'"]');
+    let mains = document.getElementById('m_'+ID);
+    tab.remove()
+    mains.remove();
+}
+function parseContentTest(data){
+    console.log(data);
+    questions = data.children
+    let questionsList = '['
+    for (let q=0; q<questions.length; q++){
+        let questionOnly = '['
+        question_text = questions[q].children[0].children[1].value;
+        console.log(question_text);
+        answers = questions[q].children[1].children;
+        let zero = 0;
+        let answersList = '['
+        for (let ans=0; ans<answers.length; ans++){
+            let answerOnly = '['
+            zero++
+            answerOnly+='"'+answers[ans].children[2].value+'"';
+            answerOnly+=','
+            answerOnly+='"'+answers[ans].children[1].checked+'"';
+            answerOnly+='],'
+            answersList+=answerOnly
+            console.log('   Answer '+ zero +':' +answers[ans].children[2].value+' | '+answers[ans].children[1].checked);
+        }
+        answersList = answersList.substring(0, answersList.length - 1);
+        answersList+=']'
+        questionOnly += '"'+question_text+'"'
+        questionOnly += ','
+        questionOnly += answersList
+        questionOnly += '],'
+
+        questionsList += questionOnly
+    }
+    questionsList = questionsList.substring(0, questionsList.length - 1);
+    questionsList += ']';
+    console.log(questionsList)
+    return questionsList
+}
+</script>
+{% endblock %}

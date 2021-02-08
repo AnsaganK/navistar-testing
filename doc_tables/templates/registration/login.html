@@ -1,0 +1,39 @@
+{% load static navistar_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Navistar-Documents</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="{% static 'favicon.jpg' %}" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+<body>
+
+	<div class="header">
+		<div class="headText">Navistar-Documents</div>
+	</div>
+    {% if request.user.is_authenticated %}
+    <p style="text-align:center;">Вы авторизованы перейдите на <a href="/">главную</a></p>
+
+{% else %}
+    <div class="sign">
+    <form action="{% url 'login' %}?next={% if test_slug %}{{ test_slug }}{% else %}/{% endif %}" method="post">
+        <img src="{% static 'logo.png' %}" alt="">
+        {% csrf_token %}
+        <div class="wrap_input" style="flex-direction: row;"><label for="login">Логин</label><input type="text" name="username" id="login"></div>
+        <div class="wrap_input" style="flex-direction: row;"><label for="password">Пароль</label><input type="password" name="password" id="password"></div>
+        <button type="submit">Отправить</button>
+    </form>
+    <a href="{% url 'signup' %}" style="
+    margin: auto;
+    display: table;
+    color: #0e5389;
+">Зарегистрироваться</a>
+</div>
+{% endif %}
+</body>
+</html>

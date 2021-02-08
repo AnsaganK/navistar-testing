@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<p style="text-align:center;font-size:20px;">Изменить профиль</p>
+<form action="{% url 'update_user' user.pk %}" class="form_user" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div style="display:flex;justify-content:center;">
+        <input name="photo" id="file" type="file"  onchange="onFileSelected(event, this)" style="display:none;" value="{% if user.profile.photo %}{{ user.profile.photo  }}{% endif %}">
+        <label for="file" style="border-radius:100%;">
+            <img id="image_user" src="{% if user.profile.photo %}{{ user.profile.photo.url  }}{% else %}{% static 'anonym.png' %}{% endif %}" style="border-radius:100%;width:180px;cursor:pointer;border: 1px solid#b5b5b5;" alt="">
+        </label>
+    </div>
+    <div class="wrap_input"><label for="">Логин</label><input type="text" name="username" value="{% if user.username %}{{ user.username }}{% endif %}"></div>
+    <div class="wrap_input"><label for="">Имя</label><input type="text" name="first_name" value="{% if user.first_name %}{{ user.first_name }}{% endif %}"></div>
+    <div class="wrap_input"><label for="">Фамилия</label><input type="text" name="last_name" value="{% if user.last_name %}{{ user.last_name }}{% endif %}"></div>
+    <div class="wrap_input"><label for="">Почта</label><input type="email" name="email" value="{% if user.email %}{{ user.email }}{% endif %}"></div>
+    <div class="wrap_input"><label for="">Телефон</label><input type="text" name="phone" value="{% if user.profile.phone %}{{ user.profile.phone }}{% endif %}"></div>
+    <div class="wrap_input"><label for="">Должность</label><input type="text" name="work" value="{% if user.profile.work %}{{ user.profile.work }}{% endif %}"></div>
+    <div style="display:flex;justify-content:space-between;">
+    <button type="submit">Изменить</button>
+        </div>
+</form>
+<script>
+    function onFileSelected(event, r) {
+      var selectedFile = event.target.files[0];
+        console.log(selectedFile);
+      var reader = new FileReader();
+
+      var imgtag = document.getElementById("image_user");
+
+      if (r.files.length === 0){
+        imgtag.src = "{% static 'anonym.png' %}";
+      }
+
+      imgtag.title = selectedFile.name;
+
+      reader.onload = function(event) {
+        imgtag.src = event.target.result;
+      };
+
+      reader.readAsDataURL(selectedFile);
+         console.log(selectedFile);
+    }
+</script>
+{% endblock %}

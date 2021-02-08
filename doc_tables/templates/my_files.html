@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="tables">
+{% if files %}
+<h1 class="title_block">Мои файлы</h1>
+    <div style="overflow:auto;max-width:100vw;">
+    <table>
+        <thead>
+        <tr>
+            <td>Файл</td>
+            <td>Вид</td>
+            <td>Скачать</td>
+            <td>Дата</td>
+            <td>Архив</td>
+        </tr>
+        </thead>
+        <tbody>
+
+            {% for i in files %}
+            <tr>
+                <td>{{ i.data.name }}</td>
+                <td><a href="{{ i.data.get_absolute_url }}"  class="link_table">Таблица</a></td>
+                <td><a href="{{ i.file.url }}" download>Скачать</a></td>
+                <td>{{ i.date }}</td>
+                <td><a href="{% url 'addArchiveTables' i.pk %}"><img src="{% static 'remove2.png' %}"  width="20" style="display:block;margin:0px auto;" alt=""></a></td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+        </div>
+    {% else %}
+    <p style="
+    color: #8f8f8f;
+">У вас нет добавленных файлов</p>
+    {% endif %}
+    <a href="{% url 'addTables' %}" style="
+    margin: 50px auto;
+    border: 1px solid #6595cf;
+    display: flex;
+    padding: 10px;
+    color: #5b9ce3;
+    box-shadow: 0px 0px 4px #65687687;
+"><img src="{% static 'add.png' %}" width="20" style="margin-right:10px" alt="">Добавить файл</a>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,58 @@
+{% load static navistar_tags %}
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Navistar-CRM</title>
+	<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="shortcut icon" href="{% static 'favicon.jpg' %}" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    {% block head %}
+    {% endblock %}
+
+</head>
+<body>
+{% if request.user.is_authenticated %}
+{% if request.user|hasNotGroup:"testingUsers" %}
+<input type="checkbox" id="hmt" class="hidden-menu-ticker">
+<label class="btn-menu" for="hmt">
+  <span class="first"></span>
+  <span class="second"></span>
+  <span class="third"></span>
+</label>
+<ul class="hidden-menu">
+    <div class="account-menu">
+        <img src="{% if request.user.profile.photo %}{{ request.user.profile.photo.url }}{% else %}{% static 'anonym.png' %}{% endif %}" class="img-user" alt="">
+        <div class="user-name">
+            <span class="firstname">{{ request.user.first_name }}</span><br>
+            <span class="lastname">{{ request.user.last_name }}</span>
+        </div>
+
+    </div>
+          <li><a href="{% url 'index' %}">Главная</a></li>
+          <li><a href="{% url 'profile' %}">Профиль</a></li>
+          <li><a href="{% url 'add_test' %}">Добавить тест</a></li>
+          <li><a href="{% url 'my_tests' %}">Мои тесты</a></li>
+          <li><a href="{% url 'archive_tests' %}">Архив тестов</a></li>
+        {% if request.user.groups.all.0.name == 'shiefs' %}
+          <li><a href="{% url 'add_user' %}">Добавить пользователя</a></li>
+          <li><a href="{% url 'list_user' %}">Пользователи</a></li>
+        {% endif %}
+          <li><a href="{% url 'logout' %}">Выйти</a></li>
+</ul>
+{% endif %}
+{% endif %}
+	<div class="header">
+		<div class="headText">Navistar-TESTING</div>
+	</div>
+
+{% block content %}
+{% endblock %}
+
+{% block script %}
+{% endblock %}
+</body>
+</html>

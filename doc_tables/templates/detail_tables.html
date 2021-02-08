@@ -1,0 +1,319 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="save_success" id="save_success">
+    <p><span id="save_text">Данные успешно сохранены</span></p>
+</div>
+<div style="display:flex;flex-direction:column;">
+<h3 style="text-align:center">Редакторы таблицы</h3>
+<form action="{% url 'update_data' data.pk %}" method="post" name="update_form">
+{% csrf_token %}
+<ul class="users">
+                {% for i in users %}
+                <li>
+                    <input type="checkbox" class="user_check" id="{{ i.pk }}" {% if i.pk in zero %}  checked {% endif %} name="{{ i.pk }}">
+                    <label class="user" style="display: flex;align-items: center;" for="{{ i.pk }}">
+                        <img src="{% if i.profile.photo %}{{ i.profile.photo.url }}{% else %}{% static 'anonym.png' %}{% endif %}" width="30" style="border-radius:30px;margin-right:5px;" alt="">
+                        <span class="title">{{ i.username }}</span>
+                    </label>
+                </li>
+                {% endfor %}
+            </ul>
+</form>
+<button type="submit" onclick="red()" style="z-index: 3;position: fixed;bottom: 0px;/* display: block; */margin: 0 auto;border: 0px;box-shadow: 0px 0px 7px #496a9b;right: 0px;color: white;height: 60px;background-color: #0e5389;cursor: pointer;outline: none;width: 160px;">
+    Сохранить
+</button>
+<input class="form-control" type="text" placeholder="Поиск" id="search-text" onkeyup="tableSearch()" style="
+    height: 26px;
+    font-size: 16px;
+    margin: 0px auto;
+    margin-top: 10px;
+    display: block;
+    max-width: 400px;
+    width:80%;
+    text-align: center;
+    outline:none;
+">
+<div id="result_count" style="text-align:center;">
+    <span id="count"><br></span>
+</div>
+<div class="tables" style="height:1000px;max-width:80%;margin:0 auto;">
+    <div style="display:flex;align-items: baseline;justify-content: space-between;">
+    <h1 class="title_block">{{ data.name }}</h1>
+    <div class="add-column">
+          <button id="add-column" type="button" class="button add-col" style="
+              margin-right: 20px;
+    background-color: #0e5389;
+    width: 50px;
+    border: 1px solid white;
+    height: 50px;
+    color: white;
+    font-size: 39px;
+    border-radius: 120px;
+    outline: none;
+    cursor: pointer;
+">
+            +
+          </button>
+    </div>
+        <div class="delete-column">
+          <button id="delete-column" type="button" class="button add-col" style="
+              margin-right: 20px;
+    background-color: #0e5389;
+    width: 50px;
+    border: 1px solid white;
+    height: 50px;
+    color: white;
+    font-size: 39px;
+    border-radius: 120px;
+    outline: none;
+    cursor: pointer;
+">
+            -
+          </button>
+    </div>
+    </div>
+<div class="wrap">
+    {{ table|safe }}
+</div>
+<div class="add-row">
+  <button id="add-row" class="button" style="
+    background-color: #0e5389;
+    width: 250px;
+    border: 1px solid white;
+    height: 50px;
+    display: block;
+    color: white;
+    margin: 0 auto;
+    font-size: 19px;
+    border-radius: 120px;
+    outline: none;
+    cursor: pointer;
+    margin-bottom:10px;
+        margin-bottom: 80px;
+    ">
+    Добавить запись
+  </button>
+</div>
+</div>
+</div>
+    <script>
+    let a = 0;
+        function createCell(row, text='') {
+          var newCell = row.insertCell(-1);
+            newCell.setAttribute('contenteditable', 'true');
+            newCell.innerHTML = text;
+
+        }
+        function createRow(table) {
+          var newRow = table.insertRow(-1);
+          var colsLength = table.tBodies[0].rows[0].cells.length;
+          for (var i = 0; i < colsLength; i++) {
+            createCell(newRow);
+          }
+        }
+        function deleteColumn(table) {
+           var allRows = table.rows;
+           for (var i=0; i< allRows.length; i++) {
+               allRows[i].deleteCell(-1);
+           }
+        }
+
+        function createColumn(table) {
+        a+=1
+        var rows_head = table.tHead.rows;
+        for (var i = 0, l = rows_head.length; i < l; i++){
+            createCell(rows_head[i],'Заголовок '+a)
+        }
+          var rows_body = table.tBodies[0].rows;
+          for (var i = 0, l = rows_body.length; i < l; i++) {
+            createCell(rows_body[i]);
+          }
+        }
+        document.addEventListener('DOMContentLoaded', function() {
+      var table = document.querySelector('table.table');
+
+      document.querySelector('#add-column').onclick = function() {
+        createColumn(table);
+      }
+      document.querySelector('#add-row').onclick = function() {
+        createRow(table);
+      }
+      document.querySelector('#delete-column').onclick = function() {
+        deleteColumn(table);
+      }
+    });
+
+
+
+function red(){
+    table_tag = document.getElementById('table_tag');
+
+    var head = table_tag.tHead.rows[0].children;
+    let head_elements = [];
+    for (var i = 0; i<head.length; i++){
+        head_elements.push(head[i].outerText);
+    }
+
+
+    var body = table_tag.tBodies[0].children;
+    let body_elements = '[';
+    for (var j = 0; j<body.length; j++){
+
+        tr = body[j];
+        let map = '{';
+        for (var k=0; k<head.length; k++){
+            td = tr.children[k].outerText;
+            th = head_elements[k];
+            map = map+"'"+th.replace(/'/g, "").replace(/"/g, "")+"'"+': '+"'"+td.replace(/'/g, "").replace(/"/g, "")+"'"+',';
+        }
+        map = map.substring(0, map.length - 1);
+        map = map+'}';
+        body_elements = body_elements+map+',';
+    }
+    body_elements = body_elements.substring(0, body_elements.length - 1);
+    body_elements = body_elements+']'
+    var formData = new FormData(document.forms.update_form);
+    formData.append("json_data", body_elements);
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "{% url 'update_data' data.pk %}", true);
+    xhr.onreadystatechange = function () {
+        if(xhr.readyState == 4 && xhr.status === 200) {
+        save_text = document.getElementById('save_text');
+            if (xhr.responseText == 'success'){
+
+                var today = new Date();
+                var hour = String(today.getHours()).padStart(2, '0');
+                var min = String(today.getMinutes()).padStart(2, '0');
+                var sec = String(today.getSeconds()).padStart(2, '0');
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+
+                today = dd + '/' + mm + '/' + yyyy + '    ' + hour + ':' + min + ':' + sec;
+                save_text.innerHTML = 'Данные успешно сохранены<br>'+today
+                success = document.getElementById('save_success');
+                success.style='display:block;';
+                setTimeout(function () {
+                    success.style='display:none;'
+                }, 1500);
+            }else{
+                console.log('False');
+            }
+        };
+    };
+    try{
+        xhr.send(formData);
+    }catch(e){
+        console.log('Не могу связаться с сервером')
+    }
+}
+
+function tableSearch() {
+    var phrase = document.getElementById('search-text');
+
+    var table = document.getElementById('table_tag');
+    var regPhrase = new RegExp(phrase.value, 'i');
+    var flag = false;
+    var zero = 0;
+    for (var i = 1; i < table.rows.length; i++) {
+        flag = false;
+        for (var j = table.rows[i].cells.length - 1; j >= 0; j--) {
+            flag = regPhrase.test(table.rows[i].cells[j].innerHTML);
+            if (flag) break;
+        }
+        if (flag) {
+            zero+=1;
+            table.rows[i].style.display = "";
+        } else {
+            table.rows[i].style.display = "none";
+        }
+
+    }
+    if (phrase.value == ''){
+        count = document.getElementById('count');
+        count.innerHTML = '<br>';
+        return;
+    }
+    if (zero == 0){
+        count = document.getElementById('count')
+        count.innerHTML = 'К сожалению записи не найдены'
+    }else{
+        count = document.getElementById('count')
+        count.innerHTML = 'Найдено записей:'+zero
+    }
+}
+
+
+    </script>
+{% endblock %}
+<!--
+<table id="tab1" class="sortable">
+    <thead>
+        <tr>
+            <th>ФИО</th>
+            <th>Должность</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<form action="" id="add_persons" method="post" onsubmit="addRow();return false;">
+<fieldset>
+<legend>Добавить сотрудника</legend>
+    <ul>
+        <li>
+            <label for="name">Фамилия</label>
+            <input type="text" name="name" id="name" value="" size="12" tabindex="1" />
+        </li>
+        <li>
+            <label for="initials">Инициалы</label>
+            <input type="text" name="initials" id="initials" value="" size="12" tabindex="2" />
+        </li>
+        <li>
+            <label for="posada">Должность</label>
+            <input type="text" name="posada" id="posada" value="" size="12" tabindex="3" />
+        </li>
+        <li>
+            <label for="subm">Действия</label>
+            <input type="submit" name="subm" class="submit" value="Добавить" tabindex="4" />
+        </li>
+	</ul>
+</fieldset>
+</form>
+<script type="text/javascript">
+	var d = document;
+
+var name;
+var initials;
+var posada;
+
+function addRow()
+{
+    // Считываем значения с формы
+    name = d.getElementById('name').value;
+    initials = d.getElementById('initials').value;
+    posada = d.getElementById('posada').value;
+
+    // Находим нужную таблицу
+    var tbody = d.getElementById('tab1').getElementsByTagName('TBODY')[0];
+
+    // Создаем строку таблицы и добавляем ее
+    var row = d.createElement("TR");
+    tbody.appendChild(row);
+
+    // Создаем ячейки в вышесозданной строке
+    // и добавляем тх
+    var td1 = d.createElement("TD");
+    var td2 = d.createElement("TD");
+
+    row.appendChild(td1);
+    row.appendChild(td2);
+
+    // Наполняем ячейки
+    td1.innerHTML = name+' '+initials;
+    td2.innerHTML = posada;
+}
+</script>
+-->

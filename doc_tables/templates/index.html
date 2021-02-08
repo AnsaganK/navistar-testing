@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+{% if request.user.groups.all.0.name == "testingUsers" %}
+<div style="margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    font-size: 21px;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    color: #0e5389;">
+    <img src="{% static 'logo.png' %}" alt="">
+    <label for="unique_id">Уникальный идентификатор</label>
+    <div>
+    <input type="text" id="unique_id" name="unique_id" style="text-align:center;width: 70%;margin: 21px auto;">
+    <button type="submit" onclick="redirect()">Перейти</button>
+    </div>
+    {{request.user.first_name}} {{request.user.last_name}}<br>
+    Ваш аккаунт имеет статус гостя
+
+</div>
+{% if tests %}
+    <div style="overflow:auto;max-width:100vw;">
+    <table>
+        <thead>
+        <tr>
+            <td>Название теста</td>
+            <td>Дата прохождения</td>
+            <td>Результат</td>
+            <td>%</td>
+        </tr>
+        </thead>
+        <tbody>
+
+    {% for i in tests %}
+            <tr>
+                <td>{% if i.success %}<a href="{% url 'foreignTests' i.test.unique_slug.slug %}">
+                    {% if i.test.name %}{{ i.test.name }}{% else %}Без названия{% endif %}
+                </a>{% else %}
+                    <a href="{% url 'pred_test' i.test.unique_slug.slug %}">
+                    {% if i.test.name %}{{ i.test.name }}{% else %}Без названия{% endif %}</a>
+                {% endif %}
+                </td>
+                <td>{% if i.success %}{{ i.date_end }}{% else %}Не завершен{% endif %}</td>
+                <td style="text-align:center;">{% if i.success %}{{ i.right_answer }} из {{ i.count_answer }}{% else %}Не завершен{% endif %}</td>
+                <td>{% if i.success %}{{ i.percentTest }}{% else %}Не завершен{% endif %}</td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+        </div>
+{% endif %}
+<a href="{% url 'logout' %}" style="    margin: auto;
+    display: table;
+    margin: 20px auto;
+    background-color: #0e5389;
+    box-shadow: 0px 0px 4px #aeaeae;
+    color: white;
+    padding: 10px 10px;
+}">Выйти</a>
+{% else %}
+    <div style="margin: 30px auto;
+    display: flex;
+    flex-direction: column;
+    font-size: 21px;
+    max-width: 480px;
+    width: 90%;
+    text-align: center;
+    color: #0e5389;">
+    <img src="{% static 'logo.png' %}" alt="">
+    Добро пожаловать на сайт Navistar-CRM!
+</div>
+{% endif %}
+{% endblock %}
+
+{% block script %}
+<script>
+    function redirect(){
+        let input = document.getElementById("unique_id").value;
+        let href = `/testContent/${ input}`;
+        console.log(href);
+        document.location.href = href;
+    }
+</script>
+{% endblock %}

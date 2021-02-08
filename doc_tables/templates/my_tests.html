@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static navistar_tags %}
+{% block head %}
+<style>
+    #copy_success{
+        display:none;
+        position: fixed;
+        margin: 0px auto;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+    }
+    #copy_success span{
+        margin: 0 auto;
+    background-color: #242424e8;
+    padding: 15px;
+    color: white;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="copy_success"><span style="">Ссылка скопирована в буфер обмена</span></div>
+<div class="tables">
+    <h1 class="title_block">Мои тесты</h1>
+    <div style="overflow:auto;max-width:100vw;">
+    <table style="margin-bottom:20px;">
+        <thead>
+        <tr>
+            <td>Название теста</td>
+            <td>Вопросы</td>
+            <td>Дата создания</td>
+            <td>Пользователей прошло</td>
+            <td>Контент</td>
+            <td>Уникальный ID</td>
+            <td>Архив</td>
+        </tr>
+        </thead>
+        <tbody>
+
+            {% for test in tests %}
+            <tr style="text-align:center;">
+                <td>{% if test.name %}{{ test.name }}{% else %}Названия нет{% endif %}</td>
+                <td><a href="{% url 'pred_test' test.unique_slug.slug %}" class="link_table">Посмотреть</a></td>
+                <td>{{ test.date }}</td>
+                <td>{% if test|userTests %}<a href="{% url 'user_test_list' test.unique_slug.slug %}">{{ test|userTests }}</a>{% else %}Не пройден{% endif %}</td>
+                <td>{% if test.content_data %}{{ test|countModAndTems }}{% else %}Нет{% endif %}</td>
+                <td style="display:flex;align-items:center;"><img src="{% static 'copy.png' %}" style="cursor:pointer;" onclick='select_copy("test_{{ test.pk }}")' height="25" alt=""><span id="test_{{ test.pk }}">{{ test.unique_slug.slug }}</span></td>
+
+                <td><a href="{% url 'addArchiveTests' test.unique_slug.slug %}"><img src="{% static 'remove2.png' %}"  width="20" style="display:block;margin:0px auto;" alt=""></a></td>
+            </tr>
+            {% endfor %}
+<!-- <svg style="width:15px;margin-left:10px;" role="img" focusable="false" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 14 14"><path fill="green" d="M12.80469 8.25q0 .03906-.008.05469-.5 2.093751-2.09376 3.394532Q9.10937 13 6.96875 13q-1.14063 0-2.20703-.429688-1.06641-.429687-1.90234-1.226562l-1.007818 1.007813Q1.703125 12.5 1.5 12.5q-.203125 0-.351563-.148437Q1 12.203125 1 12V8.5q0-.203125.148437-.351562Q1.296875 8 1.5 8H5q.20312 0 .35156.148438Q5.5 8.296875 5.5 8.5q0 .203125-.14844.351562L4.28125 9.921875q.55469.515625 1.25781.796875Q6.24219 11 7 11q1.04687 0 1.95313-.507813.90624-.507812 1.45312-1.398437.0859-.132812.41406-.914062Q10.88281 8 11.05469 8h1.5q.10156 0 .17578.07422.0742.07422.0742.175781zM13 2v3.5q0 .203125-.14844.351562Q12.70313 6 12.5 6H9q-.20313 0-.35156-.148438Q8.5 5.703125 8.5 5.5q0-.203125.14844-.351562l1.07812-1.078126Q8.57031 3 7 3q-1.04687 0-1.95312.507813-.90625.507812-1.45313 1.398437-.0859.132812-.41406.914062Q3.11719 6 2.94531 6H1.390625q-.101563 0-.175781-.07422-.07422-.07422-.07422-.175781v-.05469Q1.648438 3.601562 3.25 2.300781 4.85156 1 7 1q1.14063 0 2.21875.433594 1.07812.433593 1.91406 1.222656l1.01563-1.007813Q12.29688 1.5 12.5 1.5q.20313 0 .35156.148437Q13 1.796875 13 2z"/></svg> -->
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+    {% block script %}
+    <script>
+    function select_copy(copy_id){
+          text = document.getElementById(copy_id);
+          var input = document.createElement('input');
+            input.setAttribute('value', text.innerHTML);
+            document.body.appendChild(input);
+            input.select();
+            var result = document.execCommand('copy');
+            document.body.removeChild(input);
+            success = document.getElementById('copy_success');
+                success.style='display:block;';
+                setTimeout(function () {
+                    success.style='display:none;'
+                }, 500);
+    }
+
+    </script>
+    {% endblock %}

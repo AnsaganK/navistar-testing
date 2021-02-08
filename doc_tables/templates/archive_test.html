@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static navistar_tags %}
+{% block head %}
+<style>
+    #copy_success{
+        display:none;
+        position: fixed;
+        margin: 0px auto;
+        justify-content: center;
+        width: 100%;
+        text-align: center;
+    }
+    #copy_success span{
+        margin: 0 auto;
+    background-color: #242424e8;
+    padding: 15px;
+    color: white;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div id="copy_success"><span style="">Ссылка скопирована в буфер обмена</span></div>
+<div class="tables">
+    {% if tests %}
+    <h1 class="title_block">Архив тестов</h1>
+    <div style="overflow:auto;max-width:100vw;">
+    <table style="margin-bottom:20px;">
+        <thead>
+        <tr>
+            <td>Название теста</td>
+            <td>Вопросы</td>
+            <td>Дата создания</td>
+            <td>Пользователей прошло</td>
+            <td>Контент</td>
+            <td>Уникальный ID</td>
+            <td colspan="2">Действие</td>
+        </tr>
+        </thead>
+        <tbody>
+
+            {% for test in tests %}
+            <tr style="text-align:center;">
+                <td>{% if test.name %}{{ test.name }}{% else %}Названия нет{% endif %}</td>
+                <td><a href="{% url 'pred_test' test.unique_slug.slug %}" class="link_table">Посмотреть</a></td>
+                <td>{{ test.date }}</td>
+                <td>{% if test|userTests %}<a href="{% url 'user_test_list' test.unique_slug.slug %}">{{ test|userTests }}</a>{% else %}Не пройден{% endif %}</td>
+                <td>{% if test.content_data %}{{ test|countModAndTems }}{% else %}Нет{% endif %}</td>
+                <td style="display:flex;align-items:center;"><img src="{% static 'copy.png' %}" style="cursor:pointer;" onclick='select_copy("test_{{ test.pk }}")' height="25" alt=""><span id="test_{{ test.pk }}">{{ test.unique_slug.slug }}</span></td>
+                <td><a href="{% url 'return_my_tests' test.unique_slug.slug %}" class="link_return"><img src="{% static 'return.png' %}" width="20" alt="">Вернуть</a></td>
+                <td><a href="{% url 'delete_tests' test.unique_slug.slug %}" class="link_delete"><img src="{% static 'remove.png' %}" width="15" alt="">Удалить</a></td>
+            </tr>
+            {% endfor %}
+
+        </tbody>
+    </table>
+        {% else %}
+    <p style="
+    color: #8f8f8f;
+">У вас нет тестов в архиве</p>
+    {% endif %}
+</div>
+{% endblock %}
+    {% block script %}
+    <script>
+    function select_copy(copy_id){
+          text = document.getElementById(copy_id);
+          var input = document.createElement('input');
+            input.setAttribute('value', text.innerHTML);
+            document.body.appendChild(input);
+            input.select();
+            var result = document.execCommand('copy');
+            document.body.removeChild(input);
+            success = document.getElementById('copy_success');
+                success.style='display:block;';
+                setTimeout(function () {
+                    success.style='display:none;'
+                }, 500);
+    }
+
+            </script>
+    {% endblock %}

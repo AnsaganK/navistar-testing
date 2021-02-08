@@ -1,0 +1,342 @@
+{% extends 'base.html' %}
+{% load static navistar_tags %}
+{% block head %}
+<style>
+  svg path {
+  will-change: auto;
+  stroke-width: 20px;
+  stroke-miterlimit: round;
+  transition: stroke-dashoffset 850ms ease-in-out;
+}
+.spanUserName{
+    border-bottom: 1px solid #0e5389;
+    color: #0e5389;
+    font-size: 21px;
+    border-right: 1px solid #0e5389;
+    border-radius: 10px 0px;
+    padding: 0px 5px 5px 5px;
+}
+.svgPic{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+/* Style the tab */
+.tab {
+    float: left;
+    background-color: white;
+    border-right:0px;
+}
+/* Style the buttons inside the tab */
+.tab .tablinks {
+    display: block;
+    background-color: inherit;
+    color: black;
+    padding: 10px 16px;
+    width: 170px;
+    border: none;
+    outline: none;
+    text-align: left;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 17px;
+    padding-left:30px;
+}
+/* Change background color of buttons on hover */
+.tab .tablinks:hover {
+    background-color: #ddd;
+}
+/* Create an active/current "tab button" class */
+.tab .tablinks.activeLink {
+    background-color: #bdd1e1;
+}
+/* Style the tab content */
+.tabcontent {
+    float: left;
+    width:-webkit-fill-available;
+    padding: 0px;
+    border-left: none;
+}
+.tabcontent p{
+    margin:0px;
+}
+.tabcontent h3{
+    text-align:center;
+}
+.tabcontent label{
+    display:none;
+}
+.accordion {
+    background-color: #0e5389;
+    color: #fff;
+    cursor: pointer;
+    padding: 16px;
+    width: auto;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 18px;
+    transition: 0.5s;
+}
+
+.activeAccordion, .accordion:hover {
+    background-color: #0e5389d6;
+}
+
+.accordion:after {
+    content: '\002B';
+    color: #fff;
+  font-size: 18px;
+    font-weight: bold;
+    float: right;
+    margin-left: 5px;
+}
+
+.activeAccordion:after {
+    content: "\2212";
+}
+
+.panel {
+  color: #212121;
+  background: #f3f3f3;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+</style>
+<style>
+.tabs>label:first-of-type {
+    margin-left: 0px;
+}
+
+.tabs>label {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    background-color: #ffffff;
+    border: 1px solid #0e5389;
+    padding: 6px 28px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 0px;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+    margin-left: -4px;
+    cursor: pointer;
+    margin-bottom: 0px;
+    border-bottom:0px;
+}
+.tabs>input[type="radio"]:checked+label {
+    background-color: #0e5389;
+    color:white;
+}
+.tabs>div {
+    border: 1px solid #5ac0e6;
+    padding: 10px 15px;
+    border-radius: 4px;
+    }
+
+.tabs label{
+display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    user-select: none;
+    background-color: #eee;
+    border: 1px solid transparent;
+    padding: 2px 8px;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 4px;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+    margin-left: 6px;
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+.content_questions{
+        display: none;
+    border: 1px solid #ddd !important;
+    padding: 10px 15px !important;
+    border-radius: 4px !important;
+}
+.tabs>div {
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+.test li input:checked~label{
+    background-color:#b7c5f3;
+}
+.dis {
+    pointer-events: none;
+    cursor: default !important;
+    color: #999 !important;
+}
+</style>
+{% endblock %}
+{% block content %}
+<div>
+    {% if test.archive %}
+        <p style="color:grey;width: fit-content;background: antiquewhite;margin: auto;margin: 4px auto;padding: 4px;">Данный тест находится в архиве, он виден лишь автору теста, чтобы сделать его доступным по ссылке верните тест в список Мои тесты</p>
+    {% endif %}
+    <div style="display:flex;justify-content:space-between;" >
+    <span style="border-bottom: 1px solid #0e5389;
+    color: #0e5389;
+    font-size: 21px;
+    height:25px;
+    border-right: 1px solid #0e5389;
+    border-radius: 10px 0px;
+    padding: 0px 5px 5px 5px;">{{ request.user.first_name }}
+        {{ request.user.last_name }}</span>
+    <a href="\" style="
+"><img src="{% static 'home.png' %}" width="40px" alt=""></a>
+        </div>
+    <div class="tabs">
+        <div id="content-1" style="padding:0px;border:0px;">
+                    <h3 style="text-align: center;
+    margin: 10px auto;
+    margin-top: 10px;
+    width: fit-content;
+    color: #0e5389;
+    border-bottom: 1px solid #97b4d2;
+    /* padding-bottom: 17px; */
+    padding: 20px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #97b4d2;">{{ test.name }}</h3>
+                <div style="width:100%;display:flex;justify-content:center;">
+
+                    <div class="tab">
+                        <div>
+                        <div id="tab">
+                            {% for i in content_data %}
+                                <div class="accordion" onclick="AccOpen(this)">{{ i }}</div>
+                                <div class="panel" id="panel_{{ forloop.counter }}_parent" data-mod-id="{{ forloop.counter }}">
+                                    <div id="panel_{{ forloop.counter }}">
+                                    {% for j in content_data|returnDicEl:i %}
+                                        <div class="tablinks itemTab" onclick="openCity(event, 'm_{{ j.0 }}')" id="defaultOpen" data-tab-id="{{ j.0 }}"><span title="{{ j.1 }}">{{ j.1 }}</span></div>
+                                    {% endfor %}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                            <div class="panel" style="display: block;max-height: 80px;" data-mod-id="test">
+                                    <div>
+                                        <div class="tablinks itemTab" onclick="openCity(event, 'm_test')" style="background-color: #ffffff;border: 1px solid #0e5389;padding-left: 16px;width: auto;" onclick="openCity(event, '')" data-tab-id="">Тестирование</div>
+                                    </div>
+                            </div>
+                        </div>
+                       </div>
+                    </div>
+                    <div class="main" id="main" style="width:100%;padding:0px 15px;">
+    {% for i in content_data %}
+        {% for j in content_data|returnDicEl:i %}
+        <div id="m_{{ j.0 }}" data-content-id="{{ j.0 }}" class="tabcontent">
+            <div style="margin:auto;">
+                {{ j.2|safe }}
+            </div>
+        </div>
+        {% endfor %}
+    {% endfor %}
+
+                    </div>
+                </div>
+            <div id="m_test" data-content-id="test" class="tabcontent">
+            <div style="margin:auto;">
+                <p style="margin: 10px auto;text-align: center;">На прохождение тестирования дается одна попытка</p>
+                <a style="cursor:pointer;" onclick='window.location.replace("{{ test.get_absolute_url }}");' class="pred_test_button">Пройти тестирование</a>
+            </div>
+        </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block script %}
+<script>
+
+
+  function AccOpen(el) {
+    el.classList.toggle("activeAccordion");
+    var panel = el.nextElementSibling;
+    if (panel.style.maxHeight){
+      panel.style.maxHeight = null;
+    } else {
+      panel.style.maxHeight = panel.scrollHeight + "px";
+    }
+  }
+function openCity(evt, cityName) {
+    var i, tabcontent, tablinks;
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" activeLink", "");
+    }
+    document.getElementById(cityName).style.display = "block";
+    evt.currentTarget.className += " activeLink";
+}
+
+    pks = document.getElementsByClassName("tab_btn_pk")
+    let zs = ''
+    for (let p = 0;p<pks.length; p++){
+        pk = pks[p].getAttribute('data-pks-id')
+        let z = '#tab-btn-'+pk+':checked~#content-'+pk+'{display: block;}'
+        zs+=z;
+    }
+    var css = zs,
+    head = document.head || document.getElementsByTagName('head')[0],
+    style = document.createElement('style');
+
+    style.type = 'text/css';
+    if (style.styleSheet){
+      // This is required for IE8 and below.
+      style.styleSheet.cssText = css;
+    } else {
+      style.appendChild(document.createTextNode(css));
+    }
+
+    head.appendChild(style);
+
+
+
+// Get the element with id="defaultOpen" and click on it
+document.getElementById("defaultOpen").click();
+</script>
+<script>
+    const meters = document.querySelectorAll('svg[data-value] .meter');
+
+meters.forEach( (path) => {
+  let length = path.getTotalLength();
+  let value = parseInt(path.parentNode.getAttribute('data-value'));
+  let to = length * ((100 - value) / 100);
+  path.getBoundingClientRect();
+  path.style.strokeDashoffset = Math.max(0, to);
+});
+{% if request.user != test.create_user %}
+  let selectors = document.querySelectorAll('form[data-success="success"]');
+  let first_selector = selectors[0];
+  let ps = first_selector.parentElement.parentElement.getAttribute("data-content-id")
+  let tab_ids = document.querySelectorAll('div[data-tab-id]');
+  let last_tab = tab_ids[tab_ids.length-2];
+  last_tab_pk = last_tab.getAttribute("data-tab-id")
+  let zero = 0;
+  for (let t=0; t<tab_ids.length; t++){
+    let number = tab_ids[t].getAttribute("data-tab-id");
+    if (+number<+last_tab_pk+1 && +number>+ps){
+        tab_ids[t].classList.add('dis');
+        zero+=1;
+    }
+  }
+  console.log(zero)
+  if (selectors != []){
+    let res = document.querySelector('[data-mod-id="test"]').children[0].children[0];
+    console.log(res)
+    res.classList.add('dis')
+  }
+  {% endif %}
+</script>
+
+{% endblock %}

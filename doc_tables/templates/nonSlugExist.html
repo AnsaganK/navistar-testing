@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<p style="font-size:40px;text-align:center;color: #ff4949;margin: 10px auto;">ТЕСТ НЕ НАЙДЕН</p>
+<p style="text-align:center;color: #0e5389;">{{ slug }}</p>
+<p style="text-align:center;color: #0e5389;">Извините, но данный идентификатор написан с ошибкой либо его не существует</p>
+<p style="text-align:center;color: #0e5389;"><a href="{% url 'index' %}">Вернуться на главную</a></p>
+{% endblock %}

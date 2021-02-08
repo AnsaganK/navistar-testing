@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+{% block content %}
+    {% for i in tables %}
+        {{ i.file }}
+    {% endfor %}
+{% endblock %}

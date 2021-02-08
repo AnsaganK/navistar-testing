@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load navistar_tags %}
+{% block head %}
+<style>
+.tabs>div {
+    display: none;
+    border: 1px solid #ddd;
+    padding: 10px 15px;
+    border-radius: 4px;
+}
+
+{% for i in questions %}
+    #tab-btn-{{ forloop.counter }}:checked~#content-{{ forloop.counter }}{
+      display: block;
+    }
+    {% endfor %}
+</style>
+{% endblock %}
+{% block content %}
+{% if test.archive %}
+        <p style="color:grey;width: fit-content;background: antiquewhite;margin: auto;margin: 4px auto;padding: 4px;">Данный тест находится в архиве, он виден лишь автору теста, чтобы сделать его доступным по ссылке верните тест в список Мои тесты</p>
+    {% endif %}
+<span style="border-bottom: 1px solid #0e5389;
+    color: #0e5389;
+    font-size: 21px;
+    border-right: 1px solid #0e5389;
+    border-radius: 10px 0px;
+    padding: 0px 5px 5px 5px;">{{ request.user.first_name }}
+        {{ request.user.last_name }}</span>
+<div style="width:80%;margin:30px auto;">
+
+        <form action="{% url 'testIsValid' test.unique_slug.slug %}" method="post">
+        {% csrf_token %}
+            <div class="tabs">
+                {% for i in questions %}
+                    <input type="radio" name="tab-btn" id="tab-btn-{{ forloop.counter }}" value="" {% if forloop.counter == 1 %} checked {% endif %}>
+                    <label for="tab-btn-{{ forloop.counter }}">{{ forloop.counter }}</label>
+                {% endfor %}
+                {% for i,j in questions.items %}
+                    <div id="content-{{ forloop.counter }}">
+                         Вопрос {{ forloop.counter }}:<br>  {{ qs|returnDicEl:i|safe }}
+                        <ul class="test">
+                            {% if j|checkCount %}
+                                {% for k in j %}
+                                    <li><input type="radio" id="{{ i }}_{{ k.id }}" name="{{ i }}" value="{{ k.id }}"><label for="{{ i }}_{{ k.id }}" >{{ k.text }}</label></li>
+                                {% endfor %}
+                            {% else %}
+                            <!--  {% if k.right %} style="background-color:#bfffbf;" {% endif %}  -->
+                                {% for k in j %}
+                                    <li><input type="checkbox" id="{{ i }}_{{ k.id }}" name="{{ i }}" value="{{ k.id }}"><label for="{{ i }}_{{ k.id }}">{{ k.text }}</label></li>
+                                {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                {% endfor %}
+                <button type="submit" style="
+    background-color: #f56f6f;
+    border-color: #ff6d6d;
+    box-shadow: 0px 0px 2px #636363;
+    border: 0px;
+    color: #ffffff;
+    float: right;
+    padding: 10px;
+    cursor: pointer;
+    margin-top: 20px;
+">Завершить</button>
+            </div>
+        </form>
+    </div>
+
+{% endblock %}
+{% block script %}
+<script>
+</script>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<p style="text-align:center;font-size:20px;">Создать пользователя</p>
+{% if error1 %} <p style="color: red;text-align: center;">Такой пользователь уже существует</p> {% endif %}
+{% if error2 %} <p style="color: red;text-align: center;">Пароли не совпадают</p> {% endif %}
+<form action="{% url 'add_user_post' %}" class="form_user" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div style="display:flex;justify-content:center;">
+        <input name="photo" id="file" type="file"  onchange="onFileSelected(event, this)" style="display:none;">
+        <label for="file" style="border-radius:100%;">
+            <img id="image_user" src="{% static 'anonym.png' %}" style="border-radius:100%;width:180px;cursor:pointer;    border: 1px solid#b5b5b5;" alt="">
+        </label>
+    </div>
+    <div class="wrap_input"><label for="">Логин</label><input type="text" name="username"></div>
+    <div class="wrap_input"><label for="">Имя</label><input type="text" name="first_name"></div>
+    <div class="wrap_input"><label for="">Фамилия</label><input type="text" name="last_name"></div>
+    <div class="wrap_input"><label for="">Почта</label><input type="email" name="email"></div>
+    <div class="wrap_input"><label for="">Телефон</label><input type="text" name="phone"></div>
+    <div class="wrap_input"><label for="">Должность</label><input type="text" name="work"></div>
+    <div class="wrap_input"><label for="">Пароль</label><input type="password" name="password1"></div>
+    <div class="wrap_input"><label for="">Пароль(повтор)</label><input type="password" name="password2"></div>
+    <button type="submit">Создать</button>
+</form>
+<script>
+    function onFileSelected(event, r) {
+      var selectedFile = event.target.files[0];
+        console.log(selectedFile);
+      var reader = new FileReader();
+
+      var imgtag = document.getElementById("image_user");
+
+      if (r.files.length === 0){
+        imgtag.src = "{% static 'anonym.png' %}";
+      }
+
+      imgtag.title = selectedFile.name;
+
+      reader.onload = function(event) {
+        imgtag.src = event.target.result;
+      };
+
+      reader.readAsDataURL(selectedFile);
+         console.log(selectedFile);
+    }
+</script>
+{% endblock %}

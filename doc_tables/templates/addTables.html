@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <form action="{% url 'addTablesPost' %}" method="post" style="max-width:100%;" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="add_file" style="    margin: 0 auto;
+    display: table;
+    text-align: center;">
+              <div class="form-group">
+                <label class="label">
+                  <i class="material-icons">attach_file</i>
+                  <span class="title" id="file_name">Добавить файл</span>
+                  <input type="file" name="file" accept=".xls,.xlsx" onchange="file_name(this)">
+                </label>
+              </div>
+            <ul class="users">
+                {% for i in users %}
+                {% if i.pk != request.user.pk %}
+                <li>
+                    <input type="checkbox" class="user_check" id="{{ i.pk }}" name="{{ i.pk }}">
+                    <label class="user" style="display: flex;align-items: center;" for="{{ i.pk }}">
+                        <img src="{% if i.profile.photo %}{{ i.profile.photo.url }}{% else %}{% static 'anonym.png' %}{% endif %}" width="30" style="border-radius:30px;" alt="">
+                        <span class="title">{{ i.username }}</span>
+                    </label>
+                </li>
+                {% endif %}
+                {% endfor %}
+            </ul>
+            <button type="submit" class="add_button">Сохранить</button>
+        </div>
+
+    </form>
+
+<script>
+    function file_name(r){
+        if (r.files.length === 0){
+        document.getElementById('file_name').innerHTML = 'Добавить файл';
+        }
+        else{
+        var z = r.files[0].name;
+        document.getElementById('file_name').innerHTML = z;
+        }
+    }
+</script>
+{% endblock %}
+
+<!--
+<table id="tab1" class="sortable">
+    <thead>
+        <tr>
+            <th>ФИО</th>
+            <th>Должность</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+<form action="" id="add_persons" method="post" onsubmit="addRow();return false;">
+<fieldset>
+<legend>Добавить сотрудника</legend>
+    <ul>
+        <li>
+            <label for="name">Фамилия</label>
+            <input type="text" name="name" id="name" value="" size="12" tabindex="1" />
+        </li>
+        <li>
+            <label for="initials">Инициалы</label>
+            <input type="text" name="initials" id="initials" value="" size="12" tabindex="2" />
+        </li>
+        <li>
+            <label for="posada">Должность</label>
+            <input type="text" name="posada" id="posada" value="" size="12" tabindex="3" />
+        </li>
+        <li>
+            <label for="subm">Действия</label>
+            <input type="submit" name="subm" class="submit" value="Добавить" tabindex="4" />
+        </li>
+	</ul>
+</fieldset>
+</form>
+<script type="text/javascript">
+	var d = document;
+
+var name;
+var initials;
+var posada;
+
+function addRow()
+{
+    // Считываем значения с формы
+    name = d.getElementById('name').value;
+    initials = d.getElementById('initials').value;
+    posada = d.getElementById('posada').value;
+
+    // Находим нужную таблицу
+    var tbody = d.getElementById('tab1').getElementsByTagName('TBODY')[0];
+
+    // Создаем строку таблицы и добавляем ее
+    var row = d.createElement("TR");
+    tbody.appendChild(row);
+
+    // Создаем ячейки в вышесозданной строке
+    // и добавляем тх
+    var td1 = d.createElement("TD");
+    var td2 = d.createElement("TD");
+
+    row.appendChild(td1);
+    row.appendChild(td2);
+
+    // Наполняем ячейки
+    td1.innerHTML = name+' '+initials;
+    td2.innerHTML = posada;
+}
+</script>
+-->

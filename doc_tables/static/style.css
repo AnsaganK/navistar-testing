@@ -528,26 +528,12 @@ padding-top: 10px;
     }
 
     .tabs>div {
-      display: none;
       border: 1px solid #ddd;
       padding: 10px 15px;
       border-radius: 4px;
     }
 
     /* отобразить контент, связанный с вабранной радиокнопкой (input type="radio") */
-    #tab-btn-1:checked~#content-1,
-    #tab-btn-2:checked~#content-2,
-    #tab-btn-3:checked~#content-3,
-    #tab-btn-4:checked~#content-4,
-    #tab-btn-5:checked~#content-5,
-    #tab-btn-6:checked~#content-6,
-    #tab-btn-7:checked~#content-7,
-    #tab-btn-8:checked~#content-8,
-    #tab-btn-9:checked~#content-9,
-    #tab-btn-10:checked~#content-10,
-    #tab-btn-11:checked~#content-11{
-      display: block;
-    }
 
     .tabs>label {
       display: inline-block;
@@ -626,9 +612,9 @@ padding-top: 10px;
     height: 24px;
     font-size: 20px;
     border-radius: 30px;
-    margin-bottom: 25px;
     outline: none;
     text-align:center;
+    margin-bottom:10px;
 }
 #sendFormTest{
     margin-top:20px;
@@ -650,10 +636,77 @@ padding-top: 10px;
 }
 .pred_test_button{
         color: white;
-    background-color: #99e299;
+    background-color:#5dde60;// #99e299;
     margin: 0 auto;
-    box-shadow: 0px 0px 4px #696969;
-    padding: 6px;
+    padding: 6px 20px;
     display: block;
     width: fit-content;
+    transition:all .3s;
+}
+.pred_test_button:hover{
+    background-color:#99e299;
+}
+.addVariant{
+    color: grey;
+    padding: 8px 10px;
+    background: #e3e3e3;
+    width: 150px;
+    border-radius:36px;
+    text-align: center;
+    cursor: pointer;
+}
+.testlinks{
+    background-color: #191919 !important;
+    color: white !important;
+}
+.tablinks span{
+        width: 150px;
+    outline: 0px;
+}
+.tablinks img{
+        left: 40px;
+    position: relative;
+    transition:all 0.3s;
+    background-color:#ddd;
+    border-radius:10px;
+}
+.tablinks:hover img{
+    left:0px;
+}
+.tablinks img:hover{
+border-radius:10px;
+padding:1px;
+        background-color: #ffffff;
+}
+.addInputs{
+ width: 120px;
+            text-align: center;
+            padding: 9px;
+            border-radius: 30px;
+            margin: 10px 10%;
+            cursor: pointer;
+            color: #515151;
+}
+.testlinks:hover{
+    background-color:#4d4d4d !important;
+}
+.testItemQuestion label{
+    display:block !important;
+}
+.testItemVariant label{
+    display:block !important;
+}
+.testlinks.activeLink{
+background-color:#ddd;
+}
+.tabs_questions>input{
+    display: none;
+    width: 35px;
+}
+.tabs_questions>div{
+    display:none;
+}
+.tabs_questions label{
+    margin-top:15px;
+    background:none;
 }
